@@ -1,0 +1,132 @@
+import org.json.JSONObject
+
+// 本地或者滴滴内部仓库打包脚本(插件需要单独区分)
+apply plugin: 'maven-publish'
+def PUBLISH_ARCHIVES_TYPE = rootProject.ext.publish_config["archives_type"]
+def DOKIT_VERSION = rootProject.ext.publish_config["version"]
+def DOKIT_GROUP_ID = rootProject.ext.publish_config["group_id"]
+def isPublishRelease = rootProject.ext.publish_config["is_publish_release"]
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+// 读取module和ARTIFACT_ID的映射文件
+def MODULE_JSONOBJECT = new JSONObject(new File("${rootProject.rootDir}/dokit_module.json").text)
+
+
+afterEvaluate {
+    publishing {
+        publications {
+
+            Production(MavenPublication) {
+                // 确保必要的字段不为空
+                if (!DOKIT_GROUP_ID) throw new GradleException("Missing DOKIT_GROUP_ID in publish_config")
+                if (!DOKIT_VERSION) throw new GradleException("Missing DOKIT_VERSION in publish_config")
+                if (!project.ARTIFACT_ID) throw new GradleException("Missing ARTIFACT_ID for project")
+
+                from isPublishRelease ? getComponent("release") : getComponent("debug")
+
+                groupId = DOKIT_GROUP_ID
+                artifactId = project.ARTIFACT_ID
+
+                def VERSION_SUFFIX = isPublishRelease ? '' : '-SNAPSHOT'
+                version = DOKIT_VERSION + VERSION_SUFFIX
+
+                println "maven 依赖坐标 --------->${groupId}:${artifactId}:${version}"
+
+                // 添加 sources.jar 和 javadoc.jar 到发布内容中
+                artifact sourcesJar
+                artifact javadocsJar
+
+                // Self-explanatory metadata for the most part
+                pom {
+                    name = project.ARTIFACT_ID
+                    description = 'DoKit is an efficiency platform for the entire life cycle of general front-end product research and development.'
+                    // If your project has a dedicated site, use its URL here
+                    url = 'https://github.com/didi/DoraemonKit'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'OrangeLab'
+                            name = 'Orange Lab'
+                            email = 'orange-lab@didiglobal.com'
+                        }
+                    }
+                    // Version control info, if you're using GitHub, follow the format as seen here
+                    scm {
+                        connection = 'scm:git:git://github.com/didi/DoraemonKit.git'
+                        developerConnection = 'scm:git:ssh://github.com/didi/DoraemonKit.git'
+                        url = 'https://github.com/didi/DoraemonKit/tree/master'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            mavenLocal()
+        }
+    }
+}
+
+// 示例：优先使用 release，否则 fallback 到 java 组件
+def getComponent(name) {
+    try {
+        return components.getByName(name)
+    } catch (Exception ignored) {
+        return components.getByName("java")
+    }
+}
+
+// type显示指定任务类型或任务, 这里指定要执行Javadoc这个task,这个task在gradle中已经定义
+task Javadocs(type: Javadoc) {
+    def hasAndroidLibraryPlugin = project.plugins.hasPlugin("com.android.library")
+    if (hasAndroidLibraryPlugin) {
+        // 设置源码所在的位置
+        source = android.sourceSets.main.java.getSrcDirs()
+    } else {
+        try {
+            source = project.java.sourceSets.main.kotlin.getSrcDirs()
+        } catch (exception) {
+            println "$it  使用 ${project.name} 的 java 源码目录异常，使用 kotlin 源码目录"
+            source = project.kotlin.sourceSets.main.kotlin.getSrcDirs()
+        }
+    }
+}
+
+// 生成javadoc.jar
+task javadocsJar(type: Jar) {
+    // 指定文档名称
+    classifier = 'javadoc'
+    from Javadocs.destinationDir
+}
+
+// 打包main目录下代码和资源的task，生成sources.jar
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    def hasAndroidLibraryPlugin = project.plugins.hasPlugin("com.android.library")
+    if (hasAndroidLibraryPlugin) {
+        from android.sourceSets.main.java.getSrcDirs()
+    } else {
+        try {
+            from project.java.sourceSets.main.kotlin.getSrcDirs()
+        } catch (exception) {
+            println "$it 使用 ${project.name} 的 java 源码目录异常，使用 kotlin 源码目录"
+            from project.kotlin.sourceSets.main.kotlin.getSrcDirs()
+        }
+    }
+}
+
+
+// tasks.whenTaskAdded { task ->
+//    if (task.name.startsWith("publish")) {
+//        // 打包发布之前清除之前的编译产物
+//        Task cleanTask = project.getTasksByName('clean', false).first()
+//        task.dependsOn(cleanTask)
+//        task.mustRunAfter(cleanTask)
+//    }
+//}

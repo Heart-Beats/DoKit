@@ -16,12 +16,14 @@ buildscript {
 
 
     repositories {
-        google()
+        maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' } // 腾讯镜像
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://jitpack.io' }
+        google()  // 阿里云对于有些库会有丢失，加入进行兜底
         mavenCentral()
-        jcenter()
-        maven {
-            url "https://oss.sonatype.org/content/groups/public"
-        }
+        gradlePluginPortal()
 
         println("[dokit build] add buildscript private repositories")
         println("[dokit build] usePrivateEnv=" + usePrivateEnv() +",privateRepository="+ privateRepository())
@@ -49,10 +51,10 @@ buildscript {
             classpath "io.github.didi.dokit:dokitx-plugin:$dokitPluginVersion"
         }
 
-//        classpath "com.didiglobal.booster:booster-task-compression-pngquant:${rootProject.ext.android["booster_version"]}"
+        //        classpath "com.didiglobal.booster:booster-task-compression-pngquant:${rootProject.ext.android["booster_version"]}"
 
-//        classpath "com.didiglobal.booster:booster-gradle-plugin:3.3.1"
-//        classpath "com.didiglobal.booster:booster-task-analyser:3.3.1"
+        //        classpath "com.didiglobal.booster:booster-gradle-plugin:3.3.1"
+        //        classpath "com.didiglobal.booster:booster-task-analyser:3.3.1"
     }
 
 }
@@ -62,12 +64,13 @@ apply from: "./config.gradle"
 allprojects {
     def isRootProject = "Dokit-Android".equals(project.name)
     repositories {
-        google()
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }   // 腾讯镜像
+        google()  // 阿里云对于有些库会有丢失，加入进行兜底
         mavenCentral()
-        jcenter()
-        maven {
-            url "https://oss.sonatype.org/content/groups/public"
-        }
 
         println("[dokit build] add allprojects repositories config project=" + project.name)
         println("[dokit build] usePrivateEnv=" + usePrivateEnv() + ",privateRepository=" + privateRepository())
@@ -150,13 +153,13 @@ task checkUploadConfig4Maven() {
             modules.add(it.name)
         }
 
-//        if (!modules.contains("dokit-rpc")) {
-//            throw new RuntimeException("未找到dokit-rpc module。。。")
-//        }
-//
-//        if (!modules.contains("dokit-rpc-mc")) {
-//            throw new RuntimeException("未找到dokit-rpc-mc module。。。")
-//        }
+        //        if (!modules.contains("dokit-rpc")) {
+        //            throw new RuntimeException("未找到dokit-rpc module。。。")
+        //        }
+        //
+        //        if (!modules.contains("dokit-rpc-mc")) {
+        //            throw new RuntimeException("未找到dokit-rpc-mc module。。。")
+        //        }
 
         if (!modules.contains("dokit-plugin")) {
             throw new RuntimeException("未找到dokit-plugin module。。。")
@@ -186,13 +189,13 @@ task checkUploadConfig4Local() {
             modules.add(it.name)
         }
 
-//        if (!modules.contains("dokit-rpc")) {
-//            throw new RuntimeException("未找到dokit-rpc module。。。")
-//        }
-//
-//        if (!modules.contains("dokit-rpc-mc")) {
-//            throw new RuntimeException("未找到dokit-rpc-mc module。。。")
-//        }
+        //        if (!modules.contains("dokit-rpc")) {
+        //            throw new RuntimeException("未找到dokit-rpc module。。。")
+        //        }
+        //
+        //        if (!modules.contains("dokit-rpc-mc")) {
+        //            throw new RuntimeException("未找到dokit-rpc-mc module。。。")
+        //        }
 
         if (!modules.contains("dokit-plugin")) {
             throw new RuntimeException("未找到dokit-plugin module。。。")
@@ -221,13 +224,13 @@ task checkUploadConfig4Didi() {
             modules.add(it.name)
         }
 
-//        if (!modules.contains("dokit-rpc")) {
-//            throw new RuntimeException("未找到dokit-rpc module。。。")
-//        }
-//
-//        if (!modules.contains("dokit-rpc-mc")) {
-//            throw new RuntimeException("未找到dokit-rpc-mc module。。。")
-//        }
+        //        if (!modules.contains("dokit-rpc")) {
+        //            throw new RuntimeException("未找到dokit-rpc module。。。")
+        //        }
+        //
+        //        if (!modules.contains("dokit-rpc-mc")) {
+        //            throw new RuntimeException("未找到dokit-rpc-mc module。。。")
+        //        }
 
         if (!modules.contains("dokit-plugin")) {
             throw new RuntimeException("未找到dokit-plugin module。。。")

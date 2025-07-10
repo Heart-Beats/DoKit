@@ -1,20 +1,21 @@
 ext {
     publish_config = [
-        //0:发布到到本地localRepoURL仓库
-        //1:发布到滴滴内部仓库 一般不建议使用 如果需要发布到滴滴内网仓库需要将版本号改得比较大 假如版本号跟jcenter上的一致会由于缓存导致没法下载最新的jcenter的线上代码
-        //2:发布到maven_central远程仓库
-        archives_type: 0,
-        //0:依赖dokit本地module运行
-        //1:依赖dokit远程aar运行
-        run_type     : 0,
-        //0:外部公共环境
-        //1:内部私有环境，使用私有仓库构建，仓库地址在 local.properties 中添加 PRIVATE_REPOSITORY_URL
-        run_env      : 1,
-        //是否使用本地仓库，需要使用绝对路径，仓库地址在 local.properties 中添加 LOCAL_REPOSITORY_URL
-        use_local    : true,
-//        group_id     : 'io.github.didi.dokit',
-        group_id     : 'com.didichuxing.doraemonkit',
-        version      : '3.7.14.9-kotlin-13'
+        // 0:发布到到本地localRepoURL仓库
+        // 1:发布到滴滴内部仓库 一般不建议使用 如果需要发布到滴滴内网仓库需要将版本号改得比较大 假如版本号跟jcenter上的一致会由于缓存导致没法下载最新的jcenter的线上代码
+        // 2:发布到maven_central远程仓库
+        archives_type     : 0,
+        // 0:依赖dokit本地module运行
+        // 1:依赖dokit远程aar运行
+        run_type          : 0,
+        // 0:外部公共环境
+        // 1:内部私有环境，使用私有仓库构建，仓库地址在 local.properties 中添加 PRIVATE_REPOSITORY_URL
+        run_env           : 1,
+        // 是否使用本地仓库，需要使用绝对路径，仓库地址在 local.properties 中添加 LOCAL_REPOSITORY_URL
+        use_local         : true,
+        group_id          : 'io.github.didi.dokit',
+        // group_id        : 'com.didichuxing.doraemonkit',
+        version           : '3.7.14.9-kotlin-13',
+        is_publish_release: false
     ]
 
     android = [compileSdkVersion             : 31,
@@ -22,7 +23,7 @@ ext {
                minSdkVersion_16              : 16,
                minSdkVersion_21              : 21,
                targetSdkVersion              : 31,
-               //app版本号
+               // app版本号
                versionCode                   : 1,
                versionName                   : "1.0.0",
                glide_version                 : "4.9.0",
@@ -62,31 +63,31 @@ ext {
                     "fragment"                      : "androidx.fragment:fragment:1.2.0",
                     "fragment-ktx"                  : "androidx.fragment:fragment-ktx:1.2.0",
                     "drawerlayout"                  : "androidx.drawerlayout:drawerlayout:1.1.1",
-                    //constraintLayout
+                    // constraintLayout
                     "constraintLayout"              : 'androidx.constraintlayout:constraintlayout:1.1.3',
 
-                    //lifecycle
+                    // lifecycle
                     "lifecycle-viewmodel-savedstate": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0",
                     "lifecycle-comm"                : "androidx.lifecycle:lifecycle-common-java8:2.2.0",
-                    //test
+                    // test
                     "junit"                         : "junit:junit:4.12",
-                    //第三方
+                    // 第三方
                     "guava"                         : "com.google.guava:guava:27.1-android",
-                    //表格
+                    // 表格
                     //"SmartTable"                    : 'com.github.huangyanbin:SmartTable:2.2.0',
                     "retrofit2"                     : "com.squareup.retrofit2:retrofit:2.9.0",
                     "retrofit2_scalars"             : "com.squareup.retrofit2:converter-scalars:2.9.0",
                     "retrofit2_gson"                : "com.squareup.retrofit2:converter-gson:2.9.0",
                     "retrofit2_rxjava2"             : "com.squareup.retrofit2:adapter-rxjava2:2.9.0",
                     "rxAndroid"                     : "io.reactivex.rxjava2:rxandroid:2.1.1",
-                    //暂时不支持3.14.0以上的okhttp版本
+                    // 暂时不支持3.14.0以上的okhttp版本
                     "okhttp_v2"                     : "com.squareup.okhttp:okhttp:${android["okhttp_v2"]}",
                     "okhttp_v3"                     : "com.squareup.okhttp3:okhttp:${android["okhttp_v3"]}",
                     "okhttp_v4"                     : "com.squareup.okhttp3:okhttp:${android["okhttp_v4"]}",
-                    //okSocket wiki:https://www.jianshu.com/p/8ee3ee766265
+                    // okSocket wiki:https://www.jianshu.com/p/8ee3ee766265
                     "oksocket"                      : "com.tonystark.android:socket:4.2.2",
                     "oksocket-server"               : "com.tonystark.android:socket-server:4.2.2",
-                    //ktor
+                    // ktor
                     "ktor_server_core"              : "io.ktor:ktor-server-core:${android["ktor"]}",
                     "ktor_server_cio"               : "io.ktor:ktor-server-cio:${android["ktor"]}",
                     "ktor_server_netty"             : "io.ktor:ktor-server-netty:${android["ktor"]}",
@@ -97,7 +98,7 @@ ext {
                     "ktor_client_android"           : "io.ktor:ktor-client-android:${android["ktor"]}",
                     "ktor_client_okhttp"            : "io.ktor:ktor-client-okhttp:${android["ktor"]}",
                     "ktor_jackson"                  : "io.ktor:ktor-jackson:${android["ktor"]}",
-                    //将urlconnection代理到okhttp
+                    // 将urlconnection代理到okhttp
                     //"okhttp_urlconnection"    : "com.squareup.okhttp3:okhttp-urlconnection:3.12.1",
                     "okio"                          : "com.squareup.okio:okio:1.17.2",
                     "utilcode"                      : 'com.blankj:utilcodex:1.29.0',
@@ -119,7 +120,7 @@ ext {
                     "haha"                          : 'com.squareup.haha:haha:2.0.4',
                     "debug-db"                      : "com.amitshekhar.android:debug-db:1.0.6",
                     "debug-db-encrypt"              : "com.amitshekhar.android:debug-db-encrypt:1.0.6",
-                    //https://github.com/Tencent/wcdb
+                    // https://github.com/Tencent/wcdb
                     "wcdb"                          : "com.tencent.wcdb:wcdb-android:1.0.8",
                     "weex_inspector"                : "com.taobao.android:weex_inspector:0.24.2.11",
                     "weex_sdk"                      : "org.apache.weex:sdk:0.28.0",
@@ -132,23 +133,23 @@ ext {
                     "didi_http"                     : 'com.didichuxing.foundation:http:2.1.0.86',
                     "didi_rpc"                      : 'com.didichuxing.foundation:rpc:2.1.0.86',
                     "okgo"                          : "com.lzy.net:okgo:3.0.4",
-                    //高德地图定位
+                    // 高德地图定位
                     "amap_location"                 : 'com.amap.api:location:6.1.0',
-                    //高德地图
+                    // 高德地图
                     "amap_search"                   : 'com.amap.api:search:9.2.0',
                     "amap_navi"                     : 'com.amap.api:navi-3dmap:8.1.0_3dmap8.1.0',
-                    //腾讯地图定位
+                    // 腾讯地图定位
                     "tencent_location"              : 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.2.5',
                     "tencent_map"                   : 'com.tencent.map:tencent-map-vector-sdk:4.4.0',
                     "tencent_map_util"              : 'com.tencent.map:sdk-utilities:1.0.6',
                     "easypermissions"               : "pub.devrel:easypermissions:2.0.1",
-                    //跨进程通信框架
+                    // 跨进程通信框架
                     "abridge"                       : "com.sjtu.yifei:abridge:1.0.1",
                     "jsoup"                         : "org.jsoup:jsoup:1.13.1",
                     "mimecraft"                     : "com.squareup.mimecraft:mimecraft:1.1.1",
-                    //tencent x5 浏览器 https://x5.tencent.com/
+                    // tencent x5 浏览器 https://x5.tencent.com/
                     "tbs"                           : "com.tencent.tbs.tbssdk:sdk:43903",
-//                    "swipeback"    : "me.imid.swipebacklayout.lib:library:1.1.0"
+                    //                    "swipeback"    : "me.imid.swipebacklayout.lib:library:1.1.0"
                     "flexbox"                       : 'com.google.android:flexbox:1.0.0',
                     "auto_service"                  : 'com.google.auto.service:auto-service:1.0',
                     "hummer"                        : 'io.github.didi.hummer:hummer:0.3.23',
@@ -156,10 +157,10 @@ ext {
                     "sandhook_nativehook"           : 'com.swift.sandhook:nativehook:4.2.1',
                     "sandhook_xposedcompat"         : 'com.swift.sandhook:xposedcompat:4.2.1',
                     "epic"                          : 'me.weishu:epic:0.11.1',
-//                    "epic"                          : 'com.github.tiann:epic:0.11.2',
+                    //                    "epic"                          : 'com.github.tiann:epic:0.11.2',
 
     ]
-    //定义全局方法
+    // 定义全局方法
     needKotlinV14 = {
         String version = publish_config["version"]
         return !version.contains("kotlin-13")
