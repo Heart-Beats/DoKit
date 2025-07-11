@@ -13,8 +13,14 @@ package com.didichuxing.doraemonkit.plugin.extension
  */
 
 open class WebViewExtension(
+    // 自定义 webview 全限定名， 其也会被 hook， 默认： android.webkit.WebView， com.tencent.smtt.sdk.WebView 以及类名含有 WebView 的类
+    var webviewClassName: String = "",
+
     var network: Boolean = true,
+
+    //  目前未实现
     var dokitWeb: Boolean = false,
+    //  目前未实现
     var vConsole: Boolean = false
 ) {
 
@@ -28,6 +34,10 @@ open class WebViewExtension(
 
     fun vConsole(boolean: Boolean) {
         vConsole = boolean
+    }
+
+    fun webviewClassName(webviewClassName: String) {
+        this.webviewClassName = webviewClassName
     }
 
     override fun toString(): String {

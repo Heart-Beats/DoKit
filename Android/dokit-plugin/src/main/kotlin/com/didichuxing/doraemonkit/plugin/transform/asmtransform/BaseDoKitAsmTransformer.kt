@@ -9,7 +9,7 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.tree.ClassNode
 import java.lang.management.ManagementFactory
 import java.lang.management.ThreadMXBean
-import java.util.*
+import java.util.ServiceLoader
 
 /**
  * ================================================
@@ -85,9 +85,8 @@ open class BaseDoKitAsmTransformer : Transformer {
         val ct0 = this.currentThreadCpuTime
         val result = action()
         val ct1 = this.currentThreadCpuTime
-        durations[transformer] = durations.getOrDefault(transformer, 0) + (ct1 - ct0)
+        durations[transformer] = durations.get(transformer) ?: 0 + (ct1 - ct0)
         return result
     }
-
 }
 

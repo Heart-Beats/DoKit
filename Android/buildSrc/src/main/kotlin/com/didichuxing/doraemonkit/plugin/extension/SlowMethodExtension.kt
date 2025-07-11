@@ -1,6 +1,7 @@
 package com.didichuxing.doraemonkit.plugin.extension
 
 import groovy.lang.Closure
+import org.gradle.api.Action
 import org.gradle.util.ConfigureUtil
 
 /**
@@ -15,11 +16,8 @@ import org.gradle.util.ConfigureUtil
 
 open class SlowMethodExtension(
     //0:打印函数调用栈  1:普通模式 运行时打印某个函数的耗时 全局业务代码函数插入
-    @Deprecated("已弃用,请在项目根目录的gradle.properties中通过DOKIT_METHOD_STRATEGY=0|1 来控制")
     var strategy: Int = STRATEGY_STACK,
-    //函数功能开关
-    @Deprecated("已弃用,请在项目根目录的gradle.properties中通过DoKit_METHOD_SWITCH=true|false 来控制")
-    var methodSwitch: Boolean = false,
+
     //函数调用栈模式
     var stackMethod: StackMethodExt = StackMethodExt(),
     //普通模式
@@ -34,19 +32,28 @@ open class SlowMethodExtension(
         this.strategy = strategy
     }
 
-    fun methodSwitch(methodSwitch: Boolean) {
-        this.methodSwitch = methodSwitch
+    fun stackMethod(action: Action<StackMethodExt>) {
+        action.execute(stackMethod)
     }
 
-    fun stackMethod(closure: Closure<StackMethodExt?>?) {
+    fun normalMethod(action: Action<NormalMethodExt>) {
+        action.execute(normalMethod)
+    }
+
+    // 支持 Groovy 闭包的重载方法
+    fun stackMethod(closure: Closure<StackMethodExt>) {
         ConfigureUtil.configure(closure, stackMethod)
     }
 
-    fun normalMethod(closure: Closure<NormalMethodExt?>?) {
+    // 支持 Groovy 闭包的重载方法
+    fun normalMethod(closure: Closure<NormalMethodExt>) {
         ConfigureUtil.configure(closure, normalMethod)
     }
 
     class StackMethodExt(
+        // 堆栈层级，默认为 4
+        var stackLevel: Int = 4,
+
         //默认阈值为5ms
         var thresholdTime: Int = 5,
         //入口函集合
@@ -54,6 +61,13 @@ open class SlowMethodExtension(
         //插桩黑名单
         var methodBlacklist: MutableSet<String> = mutableSetOf()
     ) {
+
+        /**
+         * 堆栈层级
+         */
+        fun stackLevel(stackLevel: Int) {
+            this.stackLevel = stackLevel
+        }
 
         /**
          * 默认值为5ms
@@ -72,10 +86,8 @@ open class SlowMethodExtension(
         }
 
         override fun toString(): String {
-            return "StackMethodExt(thresholdTime=$thresholdTime, enterMethods=$enterMethods, methodBlacklist=$methodBlacklist)"
+            return "StackMethodExt(stackLevel=$stackLevel, thresholdTime=$thresholdTime, enterMethods=$enterMethods, methodBlacklist=$methodBlacklist)"
         }
-
-
     }
 
     class NormalMethodExt(
@@ -114,7 +126,6 @@ open class SlowMethodExtension(
     override fun toString(): String {
         return "SlowMethodExt{" +
                 "strategy=" + strategy +
-                ", methodSwitch=" + methodSwitch +
                 ", stackMethod=" + stackMethod +
                 ", normalMethod=" + normalMethod +
                 '}'

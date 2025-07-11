@@ -14,19 +14,19 @@ open class DoKitExtension(
     var logEnable: Boolean = true,
     var thirdLibEnable: Boolean = true,
 
-    var gpsEnable: Boolean = true,
+    var gpsEnable: Boolean = false,
     var gps: GpsExtension = GpsExtension(),
 
-    var networkEnable: Boolean = true,
+    var networkEnable: Boolean = false,
     var network: NetworkExtension = NetworkExtension(),
 
-    var bigImageEnable: Boolean = true,
+    var bigImageEnable: Boolean = false,
     var bigImage: BigImageExtension = BigImageExtension(),
 
-    var webViewEnable: Boolean = true,
+    var webViewEnable: Boolean = false,
     var webView: WebViewExtension = WebViewExtension(),
 
-    var slowMethodEnable: Boolean = true,
+    var slowMethodEnable: Boolean = false,
     var slowMethod: SlowMethodExtension = SlowMethodExtension()
 ) {
 

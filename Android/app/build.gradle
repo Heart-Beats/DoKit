@@ -106,19 +106,67 @@ android {
 
 
 //dokit 扩展
-
-
 dokit {
+    // 是否开启插件
+    pluginEnable true
+
+    // 是否开启日志工具
+    logEnable true
+
+    // 三方库插件是否打开
+    thirdLibEnable true
+
+    // GPS 插件是否打开
     gpsEnable true
+    gps {
+        didi true
+        baidu true
+    }
+
+    // 网络插件是否打开
+    networkEnable true
+    network {
+        okHttp true
+        urlConnect true
+        didiHttp true
+        didiSocket true
+        didiDjSocket true
+    }
+
+    // 大图插件是否打开
     bigImageEnable true
+    bigImage {
+        glide true
+        picasso true
+        fresco true
+        imageLoader true
+        coil true
+    }
+
+    // webview 插件是否打开
+    webViewEnable true
     webView {
+        webviewClassName ""
         network true
         dokitWeb true
         vConsole true
     }
-    gps {
-        didi true
-        baidu true
+
+    // 慢函数检测是否打开
+    slowMethodEnable true
+    slowMethod {
+        // 0:打印函数调用栈  1:普通模式
+        strategy 1
+
+        stackMethod{
+            // 栈模式配置层级
+            stackLevel 4
+        }
+
+        normalMethod{
+            // 普通模式阈值时间
+            thresholdTime 500
+        }
     }
 }
 
