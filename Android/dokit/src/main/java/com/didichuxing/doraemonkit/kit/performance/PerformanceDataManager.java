@@ -232,8 +232,11 @@ public class PerformanceDataManager {
         }
     }
 
+    /**
+     * 修复文件路径为外部沙盒路径，避免获取存储权限
+     */
     private String getFilePath(Context context) {
-        return context.getCacheDir() + File.separator + "doraemon/";
+        return context.getExternalCacheDir() + File.separator + "doraemon/";
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

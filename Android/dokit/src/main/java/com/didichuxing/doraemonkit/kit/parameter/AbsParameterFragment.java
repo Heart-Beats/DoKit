@@ -2,6 +2,7 @@ package com.didichuxing.doraemonkit.kit.parameter;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,16 +11,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
-import android.widget.CheckBox;
-
 import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.kit.core.BaseFragment;
-import com.didichuxing.doraemonkit.kit.performance.PerformanceDokitViewManager;
-import com.didichuxing.doraemonkit.kit.performance.PerformanceFragmentCloseListener;
 import com.didichuxing.doraemonkit.kit.core.SettingItem;
 import com.didichuxing.doraemonkit.kit.core.SettingItemAdapter;
-import com.didichuxing.doraemonkit.util.ToastUtils;
+import com.didichuxing.doraemonkit.kit.performance.PerformanceDokitViewManager;
+import com.didichuxing.doraemonkit.kit.performance.PerformanceFragmentCloseListener;
 import com.didichuxing.doraemonkit.widget.titlebar.HomeTitleBar;
 
 import java.util.ArrayList;
@@ -32,10 +29,6 @@ public abstract class AbsParameterFragment extends BaseFragment implements Perfo
 
     private SettingItemAdapter mSettingItemAdapter;
     private RecyclerView mSettingList;
-    private static final String[] PERMISSIONS_STORAGE = {
-            "android.permission.READ_EXTERNAL_STORAGE",
-            "android.permission.WRITE_EXTERNAL_STORAGE"};
-    private static final int REQUEST_EXTERNAL_STORAGE = 2;
 
 
     @Override
@@ -75,61 +68,27 @@ public abstract class AbsParameterFragment extends BaseFragment implements Perfo
     private void initView() {
         HomeTitleBar titleBar = findViewById(R.id.title_bar);
         titleBar.setTitle(getTitle());
-        titleBar.setListener(new HomeTitleBar.OnTitleBarClickListener() {
-            @Override
-            public void onRightClick() {
-                getActivity().finish();
-            }
-        });
+        titleBar.setListener(() -> getActivity().finish());
 
         mSettingList = findViewById(R.id.setting_list);
         mSettingList.setLayoutManager(new LinearLayoutManager(getContext()));
         mSettingItemAdapter = new SettingItemAdapter(getContext());
-        mSettingItemAdapter.append(getSettingItems(new ArrayList<SettingItem>()));
+        mSettingItemAdapter.append(getSettingItems(new ArrayList<>()));
 
-        mSettingItemAdapter.setOnSettingItemSwitchListener(new SettingItemAdapter.OnSettingItemSwitchListener() {
-            @Override
-            public void onSettingItemSwitch(View view, SettingItem data, boolean on) {
-                if (on && !ownPermissionCheck()) {
-                    if (view instanceof CheckBox) {
-                        ((CheckBox) view).setChecked(false);
-                    }
-                    requestPermissions(PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
-                    return;
-                }
-                SettingItemAdapter.OnSettingItemSwitchListener itemSwitchListener = getItemSwitchListener();
-                if (itemSwitchListener != null) {
-                    itemSwitchListener.onSettingItemSwitch(view, data, on);
-                }
+        mSettingItemAdapter.setOnSettingItemSwitchListener((view, data, on) -> {
+            SettingItemAdapter.OnSettingItemSwitchListener itemSwitchListener = getItemSwitchListener();
+            if (itemSwitchListener != null) {
+                itemSwitchListener.onSettingItemSwitch(view, data, on);
             }
         });
-        mSettingItemAdapter.setOnSettingItemClickListener(new SettingItemAdapter.OnSettingItemClickListener() {
-            @Override
-            public void onSettingItemClick(View view, SettingItem data) {
-                if (!ownPermissionCheck()) {
-                    requestPermissions(PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
-                    return;
-                }
-                SettingItemAdapter.OnSettingItemClickListener itemClickListener = getItemClickListener();
-                if (itemClickListener != null) {
-                    itemClickListener.onSettingItemClick(view, data);
-                }
-
+        mSettingItemAdapter.setOnSettingItemClickListener((view, data) -> {
+            SettingItemAdapter.OnSettingItemClickListener itemClickListener = getItemClickListener();
+            if (itemClickListener != null) {
+                itemClickListener.onSettingItemClick(view, data);
             }
+
         });
         mSettingList.setAdapter(mSettingItemAdapter);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
-            for (int grantResult : grantResults) {
-                if (grantResult == -1) {
-                    ToastUtils.showShort(R.string.dk_error_tips_permissions_less);
-                }
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private boolean ownPermissionCheck() {

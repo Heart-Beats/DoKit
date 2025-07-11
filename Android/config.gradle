@@ -18,11 +18,11 @@ ext {
         is_publish_release: false
     ]
 
-    android = [compileSdkVersion             : 31,
+    android = [compileSdkVersion             : 33,
                applicationId                 : "com.didichuxing.doraemondemo",
                minSdkVersion_16              : 16,
                minSdkVersion_21              : 21,
-               targetSdkVersion              : 31,
+               targetSdkVersion              : 33,
                // app版本号
                versionCode                   : 1,
                versionName                   : "1.0.0",
