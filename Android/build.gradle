@@ -62,7 +62,6 @@ buildscript {
 apply from: "./config.gradle"
 
 allprojects {
-    def isRootProject = "Dokit-Android".equals(project.name)
     repositories {
         mavenLocal()
         maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
